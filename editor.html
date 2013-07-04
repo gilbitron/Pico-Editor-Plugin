@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+    <meta charset="utf-8" />
+    <title>Pico Editor</title>
+    <link rel="stylesheet" href="{{ base_url }}/plugins/pico_editor/pico_editor.css" type="text/css" />
+    <meta name="robots" content="noindex, nofollow" />
+</head>
+<body>
+
+	<div id="saving">Saving...</div>
+
+	<div id="sidebar">
+		<div class="controls">
+			<a href="#" class="new btn" title="New">1</a>
+			<a href="{{ base_url }}/admin/logout" class="logout btn" title="Logout">2</a>
+		</div>
+		<ul class="nav">
+		{% for page in pages %}
+			<li><a href="#" data-url="{{ page.url }}" class="post"><span data-icon="3" aria-hidden="true"></span>{% if page.title %}{{ page.title }}{% else %}Untitled{% endif %}</a>
+			<a href="{{ page.url }}" target="_blank" class="view" title="View">5</a>
+			<a href="#" data-url="{{ page.url }}" class="delete" title="Delete">4</a></li>
+		{% endfor %}
+		</ul>
+	</div>
+
+	<div id="main">
+	    <div id="epiceditor"></div>
+	    
+	    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+	    <script src="{{ base_url }}/plugins/pico_editor/epiceditor/js/epiceditor.min.js"></script>
+	    <script>
+	    $(document).ready(function() {
+	    
+	    	var unsaved = false;
+		    var editor = new EpicEditor({
+				container: 'epiceditor',
+				basePath: '{{ base_url }}/plugins/pico_editor/epiceditor',
+				clientSideStorage: false,
+				file: {
+					name: 'epiceditor',
+					defaultContent: '',
+					autoSave: 5000
+				},
+				theme: {
+					base: '{{ base_url }}/plugins/pico_editor/epiceditor/themes/base/epiceditor.css',
+					preview: '{{ base_url }}/plugins/pico_editor/epiceditor/themes/preview/github.css',
+					editor: '{{ base_url }}/plugins/pico_editor/epiceditor/themes/editor/epic-light.css'
+				},
+				button: {
+					preview: true,
+					fullscreen: false
+				},
+				focusOnLoad: true
+			}).load();
+			
+			$(editor.getElement('editor')).on('keyup', function (){
+				if(!unsaved){
+					unsaved = true;
+					document.title += ' *';
+				}
+			});
+			
+			// New
+			$('.controls .new').on('click', function(e){
+				e.preventDefault();
+				var title = prompt('Please enter a post title', '');
+				if(title != null && title != ''){
+					$.post('admin/new', { title: title }, function(data){
+						if(data.error){
+							alert(data.error);
+						} else {
+							$('.nav .post').removeClass('open');
+							$('#epiceditor').data('currentFile', data.file);
+							editor.importFile('epiceditor', data.content);
+							unsaved = false;
+							document.title = document.title.replace(' *', '');
+							$('.nav').prepend('<li><a href="#" data-url="{{ base_url }}/'+ data.file +'" class="post open"><span data-icon="3" aria-hidden="true"></span>'+ data.title +'</a><a href="{{ base_url }}/'+ data.file +'" target="_blank" class="view" title="View">5</a><a href="#" data-url="{{ base_url }}/'+ data.file +'" class="delete" title="Delete">4</a></li>')
+						}
+					}, 'json');
+				}
+			});
+			
+			// Open post
+			$('.nav').on('click', '.post', function(e){
+				e.preventDefault();
+				if(unsaved && !confirm('You have unsaved changes. Are you sure you want to leave this post?')) return false;
+				$('.nav .post').removeClass('open');
+				$(this).addClass('open');
+				
+				var fileUrl = $(this).attr('data-url');
+				$.post('admin/open', { file: fileUrl }, function(data){
+					$('#epiceditor').data('currentFile', fileUrl);
+					editor.importFile('epiceditor', data);
+					unsaved = false;
+					document.title = document.title.replace(' *', '');
+				});
+			});
+			
+			// Save post
+			editor.on('autosave', function () {
+				$('#saving').text('Saving...').addClass('active');
+				$.post('admin/save', { file: $('#epiceditor').data('currentFile'), content: editor.exportFile() }, function(data){
+					$('#saving').text('Saved');
+					unsaved = false;
+					document.title = document.title.replace(' *', '');
+					setTimeout(function(){
+						$('#saving').removeClass('active');
+					}, 1000);
+				});
+			});
+			
+			// Save on preview
+			editor.on('preview', function () {
+				editor.emit('autosave');
+			});
+			
+			// Delete post
+			$('.nav').on('click', '.delete', function(e){
+				e.preventDefault();
+				if(!confirm('Are you sure you want to delete this file?')) return false;
+				$('.nav .post').removeClass('open');
+				
+				var li = $(this).parents('li');
+				var fileUrl = $(this).attr('data-url');
+				$.post('admin/delete', { file: fileUrl }, function(data){
+					li.remove();
+					$('#epiceditor').data('currentFile', '');
+					editor.importFile('epiceditor', '');
+					unsaved = false;
+					document.title = document.title.replace(' *', '');
+				});
+			});
+			
+			// Window resize
+			$('body,#main,#epiceditor').height($(window).height());
+			$(window).resize(function() {
+				$('body,#main,#epiceditor').height($(window).height());
+				editor.reflow();
+			});
+			
+		});
+	    </script>
+	</div>
+    
+</body>
+</html>

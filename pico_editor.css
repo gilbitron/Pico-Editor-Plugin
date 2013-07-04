@@ -1,0 +1,327 @@
+/*=================================*/
+/* Pico Editor Plugin
+/* By: Gilbert Pellegrom
+/* http: //dev7studios.com
+/*=================================*/
+
+@font-face {
+	font-family: 'icomoon';
+	src:url('fonts/icomoon.eot');
+	src:url('fonts/icomoon.eot?#iefix') format('embedded-opentype'),
+		url('fonts/icomoon.woff') format('woff'),
+		url('fonts/icomoon.ttf') format('truetype'),
+		url('fonts/icomoon.svg#icomoon') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+
+/* Reset Styles
+/*---------------------------------------------*/
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, font, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	outline: 0;
+	font-weight: inherit;
+	font-style: inherit;
+	font-size: 100%;
+	font-family: inherit;
+	vertical-align: baseline;
+}
+
+body {
+	line-height: 1;
+	color: black;
+	background: white;
+}
+
+table {
+	border-collapse: separate;
+	border-spacing: 0;
+}
+
+caption, th, td {
+	text-align: left;
+	font-weight: normal;
+}
+
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: "";
+}
+
+blockquote, q {
+	quotes: "" "";
+}
+
+/* HTML5 tags */
+header, section, footer,
+aside, nav, article, figure {
+	display: block;
+}
+
+/* hand cursor on clickable input elements */
+label, input[type=button], input[type=submit], button {
+	cursor: pointer;
+}
+
+/* make buttons play nice in IE:	 
+		www.viget.com/inspire/styling-the-button-element-in-internet-explorer/ */
+button {
+	width: auto;
+	overflow: visible;
+}
+
+/* Sharper Thumbnails */
+img {
+	-ms-interpolation-mode: bicubic;
+}
+
+/* Input Styles
+/*---------------------------------------------*/
+input, 
+textarea, 
+select {
+	font: 14px/20px "Helvetica Neue", Helvetica, Arial, sans-serif;
+	color: #55606E;
+	background: #FFF;
+	border: 1px solid #C2C6CB;
+	height: 40px;
+	line-height: 1.2;
+	margin: 0 0 10px 0;
+	padding: 0 10px;
+	outline: 0;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	border-radius: 3px;
+	-webkit-box-shadow: inset 0 1px 1px 0 rgba(0, 0, 0, 0.05);
+	-moz-box-shadow: inset 0 1px 1px 0 rgba(0, 0, 0, 0.05);
+	box-shadow: inset 0 1px 1px 0 rgba(0, 0, 0, 0.05);
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+	border-color: #8B8F95;
+}
+
+label { color: #555; }
+
+/* Main Styles
+/*---------------------------------------------*/
+body {
+	font: 14px/1.8em 'Open Sans', Helvetica, Arial, Helvetica, sans-serif;
+	color: #222;
+	background: #F9FBFC;
+	overflow: hidden;
+	-webkit-font-smoothing: antialiased;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+a, a:visited {
+	color: #909396;
+	text-decoration: none;
+	-webkit-transition: all 0.2s linear;
+	-moz-transition: all 0.2s linear;
+	-ms-transition: all 0.2s linear;
+	-o-transition: all 0.2s linear;
+	transition: all 0.2s linear;
+}
+
+a:hover, a:active {
+	color: #21272d;
+	text-decoration: none;
+}
+
+.btn {
+	display: inline-block; 
+	line-height: 20px;
+	padding: 1px 7px;
+	text-shadow: #FFF 0 1px 0;
+	border: 1px solid #9EA1A5;
+	background: #f9f9fa;
+	background: -moz-linear-gradient(top,  #ffffff 1%, #f9f9fa 20%, #dee0e2 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(1%,#ffffff), color-stop(20%,#f9f9fa), color-stop(100%,#dee0e2));
+	background: -webkit-linear-gradient(top,  #ffffff 1%,#f9f9fa 20%,#dee0e2 100%);
+	background: -o-linear-gradient(top,  #ffffff 1%,#f9f9fa 20%,#dee0e2 100%);
+	background: -ms-linear-gradient(top,  #ffffff 1%,#f9f9fa 20%,#dee0e2 100%);
+	background: linear-gradient(to bottom,  #ffffff 1%,#f9f9fa 20%,#dee0e2 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#dee0e2',GradientType=0 );
+	-webkit-border-radius: 3px;
+	   -moz-border-radius: 3px;
+	        border-radius: 3px;
+	-webkit-box-shadow: inset #FFF 0 0 2px,inset rgba(255, 255, 255, 0.7) 0 -1px 2px,rgba(0, 0, 0, 0.1) 0 1px 1px;
+	   -moz-box-shadow: inset #FFF 0 0 2px,inset rgba(255, 255, 255, 0.7) 0 -1px 2px,rgba(0, 0, 0, 0.1) 0 1px 1px;
+	        box-shadow: inset #FFF 0 0 2px,inset rgba(255, 255, 255, 0.7) 0 -1px 2px,rgba(0, 0, 0, 0.1) 0 1px 1px;
+}
+.btn:hover { color: #666; }
+.btn:active {
+	position: relative;
+	top: 1px;
+}
+
+#sidebar {
+	position: absolute;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	z-index: 1;
+	width: 250px;
+	height: 100%;
+	overflow: auto;
+	border-right: 1px solid #DCE0E3;
+}
+#sidebar .controls {
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 999;
+	width: 230px;
+	font-family: 'icomoon';
+	line-height: 35px;
+	height: 35px;
+	background: #F9FBFC;
+	padding: 0 10px;
+	border-bottom: 1px solid #DCE0E3;
+	-webkit-box-shadow: 0px 1px 1px rgba(0,0,0,0.07);
+	   -moz-box-shadow: 0px 1px 1px rgba(0,0,0,0.07);
+	        box-shadow: 0px 1px 1px rgba(0,0,0,0.07);
+}
+#sidebar .controls .new { 
+	float: right; 
+	margin-top: 5px;
+}
+#sidebar .nav {
+	list-style: none;
+	margin: 38px 0 25px 0;
+	padding: 0;
+}
+#sidebar li { 
+	line-height: 25px;
+	position: relative; 
+	border-bottom: 1px solid #DCE0E3;
+}
+#sidebar li a {
+	display: block;
+	padding: 0 10px;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+}
+#sidebar li a.post {
+	-webkit-transition: color 0.2s linear;
+	   -moz-transition: color 0.2s linear;
+	    -ms-transition: color 0.2s linear;
+	     -o-transition: color 0.2s linear;
+	        transition: color 0.2s linear;
+}
+#sidebar li:hover a.post { padding-right: 55px; }
+#sidebar li a.open { color: #21272d; }
+#sidebar li .view,
+#sidebar li .delete {
+	position: absolute;
+	top: 0;
+	right: 0;
+	z-index: 9;
+	font-family: 'icomoon';
+	width: 15px;
+	height: 25px;
+	padding: 0;
+	border: 0;
+	padding: 0 5px;
+	margin: 0;
+	opacity: 0;
+}
+#sidebar li .view { right: 30px; }
+#sidebar li .delete { padding-right: 10px; }
+#sidebar li:hover .view,
+#sidebar li:hover .delete { opacity: 1; }
+
+#main {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	z-index: 0;
+	width: 100%;
+	height: 100%;
+}
+
+#epiceditor {
+	height: 100%;
+	margin-left: 250px;
+}
+
+#saving {
+	position: fixed;
+	top: 20px;
+	right: 20px;
+	z-index: 9999;
+	background: #8dc92d;
+	color: #fff;
+	padding: 2px 10px;
+	opacity: 0;
+	-webkit-border-radius: 3px;
+	   -moz-border-radius: 3px;
+	        border-radius: 3px;
+	-webkit-transition: opacity 0.3s ease-out;
+	   -moz-transition: opacity 0.3s ease-out;
+	    -ms-transition: opacity 0.3s ease-out;
+	     -o-transition: opacity 0.3s ease-out;
+	        transition: opacity 0.3s ease-out;
+}
+#saving.active { opacity: 1; }
+
+/* Login Styles
+/*---------------------------------------------*/
+
+#login-form {
+	width: 300px;
+	margin: 200px auto;
+}
+#login-form h1 {
+	font-size: 20px;
+	font-weight: bold;
+	margin-bottom: 20px;
+}
+#login-form input {
+	margin-right: 5px;
+	width: 227px;
+}
+#login-form .btn {
+	width: auto;
+	padding-left: 10px;
+	padding-right: 10px;
+}
+#login-form .error {
+	color: red;
+	margin-bottom: 10px;
+}
+
+/* Misc Styles
+/*---------------------------------------------*/
+[data-icon]:before {
+	font-family: 'icomoon';
+	content: attr(data-icon);
+	speak: none;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	line-height: 1;
+	-webkit-font-smoothing: antialiased;
+	margin: 0 5px 0 0;
+	position: relative;
+	top: 1px;
+	z-index: 0;
+}

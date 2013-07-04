@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+    <meta charset="utf-8" />
+    <title>Pico Editor Login</title>
+    <link rel="stylesheet" href="{{ base_url }}/plugins/pico_editor/pico_editor.css" type="text/css" />
+    <meta name="robots" content="noindex, nofollow" />
+</head>
+<body>
+
+	<form id="login-form" method="post" action="">
+		<h1>Pico Editor Login</h1>
+		{% if login_error %}<p class="error">{{ login_error }}</p>{% endif %}
+		<label for="password">Password</label><br />
+		<input type="password" name="password" id="password" />
+		<input type="submit" value="Login" class="btn" />
+	</form>
+    
+</body>
+</html>
