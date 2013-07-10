@@ -125,7 +125,7 @@ Date: '. date('Y/m/d') .'
 		$file_url = isset($_POST['file']) && $_POST['file'] ? $_POST['file'] : '';
 		$file = basename(strip_tags($file_url));
 		if(!$file) die('Error: Invalid file');
-		$content = isset($_POST['content']) && $_POST['content'] ? $_POST['content'] : '';
+		$content = isset($_POST['content']) && $_POST['content'] ? stripslashes($_POST['content']) : '';
 		if(!$content) die('Error: Invalid content');
 		
 		$file .= CONTENT_EXT;
