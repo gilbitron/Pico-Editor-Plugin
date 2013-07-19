@@ -111,25 +111,37 @@ Date: '. date('Y/m/d') .'
 	{
 		if(!isset($_SESSION['pico_logged_in']) || !$_SESSION['pico_logged_in']) die(json_encode(array('error' => 'Error: Unathorized')));
 		$file_url = isset($_POST['file']) && $_POST['file'] ? $_POST['file'] : '';
-		$file = basename(strip_tags($file_url));
-		if(!$file) die('Error: Invalid file');
 		
-		$file .= CONTENT_EXT;
-		if(file_exists(CONTENT_DIR . $file)) die(file_get_contents(CONTENT_DIR . $file));
+		$parse_file_url = parse_url($file_url);
+		$file = $parse_file_url['path']; // Get path from $file_url
+		if(!$file) die('Error: Invalid file');
+
+		$file = CONTENT_DIR . $file; // Get file system path
+		if(file_exists($file . CONTENT_EXT)) $file = $file . CONTENT_EXT; // Make sure samename/ doesn't override samename.md
+		else if (is_dir($file) && file_exists($file . '/index' . CONTENT_EXT)) $file = $file . '/index' . CONTENT_EXT;
 		else die('Error: Invalid file');
+		
+		die(file_get_contents($file));
 	}
 	
 	private function do_save()
 	{
 		if(!isset($_SESSION['pico_logged_in']) || !$_SESSION['pico_logged_in']) die(json_encode(array('error' => 'Error: Unathorized')));
 		$file_url = isset($_POST['file']) && $_POST['file'] ? $_POST['file'] : '';
-		$file = basename(strip_tags($file_url));
+
+		$parse_file_url = parse_url($file_url);
+		$file = $parse_file_url['path']; // Get path from $file_url
 		if(!$file) die('Error: Invalid file');
+		
 		$content = isset($_POST['content']) && $_POST['content'] ? $_POST['content'] : '';
 		if(!$content) die('Error: Invalid content');
 		
-		$file .= CONTENT_EXT;
-		file_put_contents(CONTENT_DIR . $file, $content);
+		$file = CONTENT_DIR . $file; // Get file system path
+		if(file_exists($file . CONTENT_EXT)) $file = $file . CONTENT_EXT; // Make sure samename/ doesn't override samename.md
+		else if (is_dir($file) && file_exists($file . '/index' . CONTENT_EXT)) $file = $file . '/index' . CONTENT_EXT;
+		else die('Error: Invalid file');
+		
+		file_put_contents($file, $content);
 		die($content);
 	}
 	
@@ -137,11 +149,17 @@ Date: '. date('Y/m/d') .'
 	{
 		if(!isset($_SESSION['pico_logged_in']) || !$_SESSION['pico_logged_in']) die(json_encode(array('error' => 'Error: Unathorized')));
 		$file_url = isset($_POST['file']) && $_POST['file'] ? $_POST['file'] : '';
-		$file = basename(strip_tags($file_url));
+
+		$parse_file_url = parse_url($file_url);
+		$file = $parse_file_url['path']; // Get path from $file_url
 		if(!$file) die('Error: Invalid file');
 		
-		$file .= CONTENT_EXT;
-		if(file_exists(CONTENT_DIR . $file)) die(unlink(CONTENT_DIR . $file));
+		$file = CONTENT_DIR . $file; // Get file system path
+		if(file_exists($file . CONTENT_EXT)) $file = $file . CONTENT_EXT; // Make sure samename/ doesn't override samename.md
+		else if (is_dir($file) && file_exists($file . '/index' . CONTENT_EXT)) $file = $file . '/index' . CONTENT_EXT;
+		else die('Error: Invalid file');
+		
+		die(unlink($file));
 	}
 	
 	private function slugify($text)
