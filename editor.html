@@ -17,7 +17,8 @@
 		</div>
 		<ul class="nav">
 		{% for page in pages %}
-			<li><a href="#" data-url="{{ page.url }}" class="post"><span data-icon="3" aria-hidden="true"></span>{% if page.title %}{{ page.title }}{% else %}Untitled{% endif %}</a>
+			<!--<li><a href="#" data-url="{{ page.url }}" class="post"><span data-icon="3" aria-hidden="true"></span>{% if page.title %}{{ page.title }}{% else %}Untitled{% endif %}</a>-->
+			<li><a href="#" data-url="{{ page.url }}" class="post"><span data-icon="3" aria-hidden="true"></span>{{ page.url }}</a>
 			<a href="{{ page.url }}" target="_blank" class="view" title="View">5</a>
 			<a href="#" data-url="{{ page.url }}" class="delete" title="Delete">4</a></li>
 		{% endfor %}
@@ -64,9 +65,10 @@
 			// New
 			$('.controls .new').on('click', function(e){
 				e.preventDefault();
+                var dir = prompt('Please enter the dir(path without host and page/file name)', '');
 				var title = prompt('Please enter a post title', '');
 				if(title != null && title != ''){
-					$.post('admin/new', { title: title }, function(data){
+					$.post('admin/new', { title: title, dir: dir }, function(data){
 						if(data.error){
 							alert(data.error);
 						} else {
