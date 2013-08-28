@@ -113,7 +113,7 @@ Date: '. date('Y/m/d') .'
 		die(json_encode(array(
 			'title' => $title,
 			'content' => $content,
-			'file' => basename(str_replace(CONTENT_EXT, '', $file)),
+			'file' => $dir.basename(str_replace(CONTENT_EXT, '', $file)),
 			'error' => $error
 		)));
 	}
