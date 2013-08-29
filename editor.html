@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <title>Pico Editor</title>
-    <link rel="stylesheet" href="{{ base_url }}/plugins/pico_editor/pico_editor.css" type="text/css" />
+    <link rel="stylesheet" href="{{ base_url }}/{{ plugin_path }}/pico_editor.css" type="text/css" />
     <meta name="robots" content="noindex, nofollow" />
 </head>
 <body>
@@ -29,14 +29,14 @@
 	    <div id="epiceditor"></div>
 	    
 	    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
-	    <script src="{{ base_url }}/plugins/pico_editor/epiceditor/js/epiceditor.min.js"></script>
+	    <script src="{{ base_url }}/{{ plugin_path }}/epiceditor/js/epiceditor.min.js"></script>
 	    <script>
 	    $(document).ready(function() {
 	    
 	    	var unsaved = false;
 		    var editor = new EpicEditor({
 				container: 'epiceditor',
-				basePath: '{{ base_url }}/plugins/pico_editor/epiceditor',
+				basePath: '{{ base_url }}/{{ plugin_path }}/epiceditor',
 				clientSideStorage: false,
 				file: {
 					name: 'epiceditor',
@@ -44,9 +44,9 @@
 					autoSave: 5000
 				},
 				theme: {
-					base: '{{ base_url }}/plugins/pico_editor/epiceditor/themes/base/epiceditor.css',
-					preview: '{{ base_url }}/plugins/pico_editor/epiceditor/themes/preview/github.css',
-					editor: '{{ base_url }}/plugins/pico_editor/epiceditor/themes/editor/epic-light.css'
+					base: '{{ base_url }}/{{ plugin_path }}/epiceditor/themes/base/epiceditor.css',
+					preview: '{{ base_url }}/{{ plugin_path }}/epiceditor/themes/preview/github.css',
+					editor: '{{ base_url }}/{{ plugin_path }}/epiceditor/themes/editor/epic-light.css'
 				},
 				button: {
 					preview: true,

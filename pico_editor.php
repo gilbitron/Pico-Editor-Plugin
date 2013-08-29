@@ -48,7 +48,10 @@ class Pico_Editor {
 			header('Location: '. $twig_vars['base_url'] .'/admin');
 			exit;
 		}
-		
+
+        $pathArray = explode('/', dirname(__FILE__));
+        $twig_vars['plugin_path'] = $pathArray[count($pathArray)-2] . '/' . $pathArray[count($pathArray) - 1 ];
+
 		if($this->is_admin){
 			header($_SERVER['SERVER_PROTOCOL'].' 200 OK'); // Override 404 header
 			$loader = new Twig_Loader_Filesystem($this->plugin_path);
