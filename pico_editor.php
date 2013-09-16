@@ -63,6 +63,7 @@ class Pico_Editor {
 				if(isset($_POST['password'])){
 					if(sha1($_POST['password']) == $this->password){
 						$_SESSION['pico_logged_in'] = true;
+						$_SESSION['pico_config'] = $twig_vars['config'];
 					} else {
 						$twig_vars['login_error'] = 'Invalid password.';
 						echo $twig_editor->render('login.html', $twig_vars); // Render login.html
@@ -78,7 +79,27 @@ class Pico_Editor {
 			exit; // Don't continue to render template
 		}
 	}
-	
+
+	/**
+	 * Returns real file name to be edited.
+	 *
+	 * @param string $file_url the file URL to be edited
+	 * @return string
+	 */
+	private static function get_real_filename($file_url) {
+
+		$file_components = parse_url($file_url); // inner
+		$base_components = parse_url($_SESSION['pico_config']['base_url']);
+		$file_path = rtrim($file_components['path'], '/');
+		$base_path = rtrim($base_components['path'], '/');
+
+		if (empty($file_path) || $file_path === $base_path) {
+			return 'index';
+		} else {
+			return basename(strip_tags($file_path));
+		}
+	}
+
 	private function do_new()
 	{
 		if(!isset($_SESSION['pico_logged_in']) || !$_SESSION['pico_logged_in']) die(json_encode(array('error' => 'Error: Unathorized')));
@@ -111,7 +132,7 @@ Date: '. date('Y/m/d') .'
 	{
 		if(!isset($_SESSION['pico_logged_in']) || !$_SESSION['pico_logged_in']) die(json_encode(array('error' => 'Error: Unathorized')));
 		$file_url = isset($_POST['file']) && $_POST['file'] ? $_POST['file'] : '';
-		$file = basename(strip_tags($file_url));
+		$file = self::get_real_filename($file_url);
 		if(!$file) die('Error: Invalid file');
 		
 		$file .= CONTENT_EXT;
@@ -123,7 +144,7 @@ Date: '. date('Y/m/d') .'
 	{
 		if(!isset($_SESSION['pico_logged_in']) || !$_SESSION['pico_logged_in']) die(json_encode(array('error' => 'Error: Unathorized')));
 		$file_url = isset($_POST['file']) && $_POST['file'] ? $_POST['file'] : '';
-		$file = basename(strip_tags($file_url));
+		$file = self::get_real_filename($file_url);
 		if(!$file) die('Error: Invalid file');
 		$content = isset($_POST['content']) && $_POST['content'] ? $_POST['content'] : '';
 		if(!$content) die('Error: Invalid content');
@@ -137,7 +158,7 @@ Date: '. date('Y/m/d') .'
 	{
 		if(!isset($_SESSION['pico_logged_in']) || !$_SESSION['pico_logged_in']) die(json_encode(array('error' => 'Error: Unathorized')));
 		$file_url = isset($_POST['file']) && $_POST['file'] ? $_POST['file'] : '';
-		$file = basename(strip_tags($file_url));
+		$file = self::get_real_filename($file_url);
 		if(!$file) die('Error: Invalid file');
 		
 		$file .= CONTENT_EXT;
