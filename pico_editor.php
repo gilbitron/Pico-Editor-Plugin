@@ -112,7 +112,7 @@ Date: '. date('Y/m/d') .'
 		if(!isset($_SESSION['pico_logged_in']) || !$_SESSION['pico_logged_in']) die(json_encode(array('error' => 'Error: Unathorized')));
 		$file_url = isset($_POST['file']) && $_POST['file'] ? $_POST['file'] : '';
 		$file = basename(strip_tags($file_url));
-		if(!$file) die('Error: Invalid file');
+		if(!$file) $file = 'index';
 		
 		$file .= CONTENT_EXT;
 		if(file_exists(CONTENT_DIR . $file)) die(file_get_contents(CONTENT_DIR . $file));
