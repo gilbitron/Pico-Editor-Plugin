@@ -61,7 +61,7 @@ class Pico_Editor {
 				
 			if(!isset($_SESSION['pico_logged_in']) || !$_SESSION['pico_logged_in']){
 				if(isset($_POST['password'])){
-					if(sha1($_POST['password']) == $this->password){
+					if(hash('sha512',$_POST['password']) == $this->password){
 						$_SESSION['pico_logged_in'] = true;
 					} else {
 						$twig_vars['login_error'] = 'Invalid password.';
