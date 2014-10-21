@@ -104,11 +104,6 @@ class Pico_Editor {
 			'error' => $error
 			)));
 	}
-
-	private function endsWith($haystack, $needle)
-	{
-		return $needle === "" || substr($haystack, -strlen($needle)) === $needle;
-	}
 	
 	private function do_open()
 	{
@@ -173,6 +168,12 @@ class Pico_Editor {
 		}
 		
 		return $text;
+	}
+
+	
+	private function endsWith($haystack, $needle)
+	{
+		return $needle === "" || substr($haystack, -strlen($needle)) === $needle;
 	}
 	
 }
