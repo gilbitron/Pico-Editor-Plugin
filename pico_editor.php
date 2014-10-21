@@ -1,19 +1,13 @@
 <?php
 
-/**
- * Editor plugin for Pico
- *
- * @author Gilbert Pellegrom
- * @link http://pico.dev7studios.com
- * @license http://opensource.org/licenses/MIT
- * @version 1.1
- */
+// MODIFIED VERSION
 class Pico_Editor {
 
 	private $is_admin;
 	private $is_logout;
 	private $plugin_path;
 	private $password;
+	private $settings;
 	
 	public function __construct()
 	{
@@ -22,14 +16,17 @@ class Pico_Editor {
 		$this->plugin_path = dirname(__FILE__);
 		$this->password = '';
 		session_start();
-		
-		if(file_exists($this->plugin_path .'/pico_editor_config.php')){
-			global $pico_editor_password;
-			include_once($this->plugin_path .'/pico_editor_config.php');
-			$this->password = $pico_editor_password;
-		}
 	}
 	
+	public function config_loaded(&$settings) {
+		$this->settings = $settings;
+		global $pico_editor_password;
+		if(file_exists($this->plugin_path .'/pico_editor_config.php')){
+			include_once($this->plugin_path .'/pico_editor_config.php');
+		}
+		$this->password = $pico_editor_password;
+	}
+
 	public function request_url(&$url)
 	{
 		// Are we looking for /admin?
@@ -58,7 +55,7 @@ class Pico_Editor {
 				echo $twig_editor->render('login.html', $twig_vars); // Render login.html
 				exit;
 			}
-				
+
 			if(!isset($_SESSION['pico_logged_in']) || !$_SESSION['pico_logged_in']){
 				if(isset($_POST['password'])){
 					if(sha1($_POST['password']) == $this->password){
@@ -73,7 +70,7 @@ class Pico_Editor {
 					exit;
 				}
 			}
-				
+
 			echo $twig_editor->render('editor.html', $twig_vars); // Render editor.html
 			exit; // Don't continue to render template
 		}
@@ -83,15 +80,16 @@ class Pico_Editor {
 	{
 		if(!isset($_SESSION['pico_logged_in']) || !$_SESSION['pico_logged_in']) die(json_encode(array('error' => 'Error: Unathorized')));
 		$title = isset($_POST['title']) && $_POST['title'] ? strip_tags($_POST['title']) : '';
-		$file = $this->slugify(basename($title));
+		$file = str_replace($this->settings['base_url'], "", strip_tags($title));
+		if($this->endsWith($file,"/")) $file .= "index";
 		if(!$file) die(json_encode(array('error' => 'Error: Invalid file name')));
 		
 		$error = '';
 		$file .= CONTENT_EXT;
 		$content = '/*
-Title: '. $title .'
-Author: 
-Date: '. date('Y/m/d') .'		
+		Title: '. $title .'
+		Author: 
+		Date: '. date('Y/m/d') .'		
 */';
 		if(file_exists(CONTENT_DIR . $file)){
 			$error = 'Error: A post already exists with this title';
@@ -104,14 +102,20 @@ Date: '. date('Y/m/d') .'
 			'content' => $content,
 			'file' => basename(str_replace(CONTENT_EXT, '', $file)),
 			'error' => $error
-		)));
+			)));
+	}
+
+	private function endsWith($haystack, $needle)
+	{
+		return $needle === "" || substr($haystack, -strlen($needle)) === $needle;
 	}
 	
 	private function do_open()
 	{
 		if(!isset($_SESSION['pico_logged_in']) || !$_SESSION['pico_logged_in']) die(json_encode(array('error' => 'Error: Unathorized')));
 		$file_url = isset($_POST['file']) && $_POST['file'] ? $_POST['file'] : '';
-		$file = basename(strip_tags($file_url));
+		$file = str_replace($this->settings['base_url'], "", strip_tags($file_url));
+		if($this->endsWith($file,"/")) $file .= "index";
 		if(!$file) die('Error: Invalid file');
 		
 		$file .= CONTENT_EXT;
@@ -123,7 +127,8 @@ Date: '. date('Y/m/d') .'
 	{
 		if(!isset($_SESSION['pico_logged_in']) || !$_SESSION['pico_logged_in']) die(json_encode(array('error' => 'Error: Unathorized')));
 		$file_url = isset($_POST['file']) && $_POST['file'] ? $_POST['file'] : '';
-		$file = basename(strip_tags($file_url));
+		$file = str_replace($this->settings['base_url'], "", strip_tags($file_url));
+		if($this->endsWith($file,"/")) $file .= "index";
 		if(!$file) die('Error: Invalid file');
 		$content = isset($_POST['content']) && $_POST['content'] ? $_POST['content'] : '';
 		if(!$content) die('Error: Invalid content');
@@ -137,7 +142,8 @@ Date: '. date('Y/m/d') .'
 	{
 		if(!isset($_SESSION['pico_logged_in']) || !$_SESSION['pico_logged_in']) die(json_encode(array('error' => 'Error: Unathorized')));
 		$file_url = isset($_POST['file']) && $_POST['file'] ? $_POST['file'] : '';
-		$file = basename(strip_tags($file_url));
+		$file = str_replace($this->settings['base_url'], "", strip_tags($file_url));
+		if($this->endsWith($file,"/")) $file .= "index";
 		if(!$file) die('Error: Invalid file');
 		
 		$file .= CONTENT_EXT;
@@ -163,7 +169,7 @@ Date: '. date('Y/m/d') .'
 		
 		if (empty($text))
 		{
-		return 'n-a';
+			return 'n-a';
 		}
 		
 		return $text;
