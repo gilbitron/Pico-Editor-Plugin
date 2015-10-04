@@ -7,14 +7,20 @@
     <meta name="robots" content="noindex, nofollow" />
 </head>
 <body>
-
-	<form id="login-form" method="post" action="">
-		<h1>Pico Editor Login</h1>
-		{% if login_error %}<p class="error">{{ login_error }}</p>{% endif %}
-		<label for="password">Password</label><br />
-		<input type="password" name="password" id="password" />
-		<input type="submit" value="Login" class="btn" />
-	</form>
-    
+    <div class="wrapper" id="login">
+        <div class="container">
+            {% if login_error %}
+                <h1 class="error">{{ login_error }}</h1>
+            {% else %}
+                <h1>Pico Editor Login</h1>
+            {% endif %}
+            <br>
+    		<form id="login-form" class="form" method="post" action="">
+                <input type="password" name="password" id="password" placeholder="Password"/>
+    			<button type="submit" id="login-button" value="Login">Login</button>
+    		</form>
+            <br><a href="{{ base_url }}">&larr; Back</a>
+    	</div>
+    </div>
 </body>
 </html>
