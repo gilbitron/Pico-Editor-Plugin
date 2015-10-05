@@ -4,8 +4,8 @@
  * Pico Editor - a markdown editor plugin for Pico.
  *
  * How to use?
- * Extract the pico_editor folder to your Plugins dir,
- * copy & paste the following line in your config/config.php file:
+ * Extract the PicoEditor folder to your Plugins dir,
+ * Copy & paste the following line in your config/config.php file:
  *
  * // Pico Editor Configuration
  * $config['PicoEditor']['password'] = 'YOUR SHA-512 PASSWORD';
@@ -169,12 +169,12 @@ class PicoEditor extends AbstractPicoPlugin
             $loader = new Twig_Loader_Filesystem($this->plugin_path);
             $twig_editor = new Twig_Environment($loader, $twigVariables);
 
-            // check if no password exists in pico_editor_config.php
+            // check if no password exists
             if (!$this->password) {
                 // set the error message
                 $twigVariables['login_error'] = 'No password set!';
                 // render the login view
-                echo $twig_editor->render('login.html', $twigVariables); // Render login.html
+                echo $twig_editor->render('login.twig', $twigVariables); // Render login.twig
                 // don't continue to render template
                 exit;
             }
@@ -190,19 +190,19 @@ class PicoEditor extends AbstractPicoPlugin
                         // login failure
                         $twigVariables['login_error'] = 'Invalid password.';
                         // render the login view
-                        echo $twig_editor->render('login.html', $twigVariables); // Render login.html
+                        echo $twig_editor->render('login.twig', $twigVariables); // Render login.twig
                         // don't continue to render template
                         exit;
                     }
                 } else {
                     // user did not submit a password.
-                    echo $twig_editor->render('login.html', $twigVariables); // Render login.html
+                    echo $twig_editor->render('login.twig', $twigVariables); // Render login.twig
                     // don't continue to render template
                     exit;
                 }
             }
             // session Exists, render the editor...
-            echo $twig_editor->render('editor.html', $twigVariables); // Render editor.html
+            echo $twig_editor->render('editor.twig', $twigVariables); // Render editor.twig
             // don't continue to render template
             exit;
         }
