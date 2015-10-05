@@ -10,7 +10,10 @@ Install
 2. Place the following in your config/config.php file
 ```php
 // Pico Editor Configuration
-$config['PicoEditor']['password'] = 'YOUR SHA-512 PASSWORD';
+$config['PicoEditor'] = array(
+    'enabled' => true,
+    'password' => 'YOUR SHA-512 PASSWORD'
+);
 ```
 3. Create your SHA-512 hashed password (http://crypo.in.ua/tools/eng_sha512.php)
 4. Visit http://yoursite.com/?admin and login

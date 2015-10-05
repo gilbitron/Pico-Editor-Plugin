@@ -4,23 +4,24 @@
  * Pico Editor - a markdown editor plugin for Pico.
  *
  * How to use?
- * Extract the PicoEditor folder to your Plugins dir,
- * Copy & paste the following line in your config/config.php file:
+ * 1) Extract the "PicoEditor" folder to your "plugins" dir
+ * 2) Copy & paste the following lines in your config/config.php file
  *
  * // Pico Editor Configuration
- * $config['PicoEditor']['password'] = 'YOUR SHA-512 PASSWORD';
+ * $config['PicoEditor'] = array(
+ *     'enabled' => true,
+ *     'password' => 'YOUR SHA-512 PASSWORD'
+ * );
  *
- * Create your SHA-512 hased password using a site like:
- * @link{http://crypo.in.ua/tools/eng_sha512.php}
+ * 3) Create your SHA-512 hased password using a site like: @link{http://crypo.in.ua/tools/eng_sha512.php}
+ * 4) Finally, visit http://yoursite.com/?admin and login.
+ * 5) That's it!
  *
- * Finally, visit http://yoursite.com/?admin and login. That's it!
- *
+ * @author Tyler Heshka
  * @author Gilbert Pellegrom
  * @link http://pico.dev7studios.com
  * @license http://opensource.org/licenses/MIT
  * @version 1.1
- *
- * @author Tyler Heshka
  *
  */
 class PicoEditor extends AbstractPicoPlugin
@@ -30,7 +31,7 @@ class PicoEditor extends AbstractPicoPlugin
      *
      * @see AbstractPicoPlugin::$enabled
      */
-    protected $enabled = true;
+    protected $enabled = false;
 
     /**
      * This plugin depends on {@link ...}.
