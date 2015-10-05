@@ -177,7 +177,7 @@ class PicoEditor extends AbstractPicoPlugin
                 // check that user is POSTing a password
                 if (isset($_POST['password'])) {
                     // does the password match the hashed password?
-                    if (sha1($_POST['password']) == $this->password) {
+                    if (hash('sha512', $_POST['password']) == $this->password) {
                         // login success
                         $_SESSION['pico_logged_in'] = true;
                     } else {
@@ -223,6 +223,10 @@ class PicoEditor extends AbstractPicoPlugin
      */
     private function doNew()
     {
+        /**
+        * TODO: Create new files in sub directories
+        */
+
         // check for logged in
         $this->doCheckLogin();
         // sanitize post title
