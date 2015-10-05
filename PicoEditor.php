@@ -3,9 +3,17 @@
 /**
  * Pico Editor - a markdown editor plugin for Pico.
  *
- * How to use? Simply extract the pico_editor folder to your Plugins dir,
- * open the pico_editor_config.php file and insert your sha1 hashed password,
- * then visit http://www.yoursite.com/?admin and login. That's it!
+ * How to use?
+ * Extract the pico_editor folder to your Plugins dir,
+ * copy & paste the following line in your config/config.php file:
+ *
+ * // Pico Editor Configuration
+ * $config['PicoEditor']['password'] = 'YOUR SHA-512 PASSWORD';
+ *
+ * Create your SHA-512 hased password using a site like:
+ * @link{http://crypo.in.ua/tools/eng_sha512.php}
+ *
+ * Finally, visit http://yoursite.com/?admin and login. That's it!
  *
  * @author Gilbert Pellegrom
  * @link http://pico.dev7studios.com
@@ -80,15 +88,13 @@ class PicoEditor extends AbstractPicoPlugin
         $this->is_admin = false;
         $this->is_logout = false;
         $this->plugin_path = dirname(__FILE__);
-        $this->password = '';
         $this->contentDir = $config['content_dir'];
         $this->contentExt = $config['content_ext'];
 
-        // load pico_editor_config.php
-        if (file_exists($this->plugin_path.'/pico_editor_config.php')) {
-            global $pico_editor_password;
-            include_once $this->plugin_path.'/pico_editor_config.php';
-            $this->password = $pico_editor_password;
+        //Check configuration for password
+        if (isset($config['PicoEditor']['password']) &&
+        !empty($config['PicoEditor']['password'])) {
+            $this->password = $config['PicoEditor']['password'];
         }
 
         // check for session
@@ -248,6 +254,7 @@ Description:
 Author:
 Date: '.date('Y/m/d').'
 Robots: noindex,nofollow
+Template:
 ---';
         // check for duplicates
         if (file_exists($this->contentDir.$file)) {
