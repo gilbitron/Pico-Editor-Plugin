@@ -107,40 +107,42 @@ Date: '. date('Y/m/d') .'
 		)));
 	}
 	
+	private function parse_path() {
+		if(!isset($_SESSION['pico_logged_in']) || !$_SESSION['pico_logged_in']) die(json_encode(array('error' => 'Error: Unauthorized')));
+		$file_url = isset($_POST['file']) && $_POST['file'] ? $_POST['file'] : '';
+		$file = parse_url(strip_tags($file_url), PHP_URL_PATH);
+		if(!$file) die('Error: Invalid file');
+
+		if (substr($file, -1) === DIRECTORY_SEPARATOR) {
+			$file .= 'index';
+		}
+
+		return $file . CONTENT_EXT;
+	}
+
 	private function do_open()
 	{
-		if(!isset($_SESSION['pico_logged_in']) || !$_SESSION['pico_logged_in']) die(json_encode(array('error' => 'Error: Unathorized')));
-		$file_url = isset($_POST['file']) && $_POST['file'] ? $_POST['file'] : '';
-		$file = basename(strip_tags($file_url));
-		if(!$file) die('Error: Invalid file');
-		
-		$file .= CONTENT_EXT;
+		$file = $this->parse_path();
 		if(file_exists(CONTENT_DIR . $file)) die(file_get_contents(CONTENT_DIR . $file));
 		else die('Error: Invalid file');
 	}
 	
 	private function do_save()
 	{
-		if(!isset($_SESSION['pico_logged_in']) || !$_SESSION['pico_logged_in']) die(json_encode(array('error' => 'Error: Unathorized')));
-		$file_url = isset($_POST['file']) && $_POST['file'] ? $_POST['file'] : '';
-		$file = basename(strip_tags($file_url));
-		if(!$file) die('Error: Invalid file');
+		$file = $this->parse_path();
+
 		$content = isset($_POST['content']) && $_POST['content'] ? $_POST['content'] : '';
 		if(!$content) die('Error: Invalid content');
 		
-		$file .= CONTENT_EXT;
 		file_put_contents(CONTENT_DIR . $file, $content);
 		die($content);
 	}
 	
 	private function do_delete()
 	{
-		if(!isset($_SESSION['pico_logged_in']) || !$_SESSION['pico_logged_in']) die(json_encode(array('error' => 'Error: Unathorized')));
-		$file_url = isset($_POST['file']) && $_POST['file'] ? $_POST['file'] : '';
-		$file = basename(strip_tags($file_url));
-		if(!$file) die('Error: Invalid file');
+		// copy-paste programming, complete with typos!
+		$file = $this->parse_path();
 		
-		$file .= CONTENT_EXT;
 		if(file_exists(CONTENT_DIR . $file)) die(unlink(CONTENT_DIR . $file));
 	}
 	
