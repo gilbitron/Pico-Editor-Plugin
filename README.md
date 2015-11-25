@@ -7,7 +7,7 @@ Install
 -------
 
 1. Extract a copy the "PicoEditor" folder to your Pico install "plugins" folder
-   - or `git clone git@github.com:theshka/Pico-Editor-Plugin.git PicoEditor`
+   - or `git clone https://github.com/theshka/Pico-Editor-Plugin.git PicoEditor`
 2. Place the following in your config/config.php file
 ```php
 // Pico Editor Configuration
