@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <title>Pico Editor</title>
-    <link rel="stylesheet" href="{{ base_url }}/plugins/PicoEditor/PicoEditor.css" type="text/css" />
+    <link rel="stylesheet" href="{{ base_url }}/plugins/PicoEditor/assets/PicoEditor.css" type="text/css" />
     <meta name="robots" content="noindex, nofollow" />
 </head>
 <body>
@@ -13,7 +13,7 @@
 	<div id="sidebar">
 		<div class="controls">
 			<a href="#" class="new btn" title="New">1</a>
-			<a href="{{ base_url }}/?admin/logout" class="logout btn" title="Logout">2</a>
+			<a href="{{ editor_url | link }}/logout" class="logout btn" title="Logout">2</a>
             <a href="{{ base_url }}" target="_blank" class="view btn" title="View Site">5</a>
 		</div>
 		<ul class="nav">
@@ -33,14 +33,14 @@
 	    <div id="epiceditor"></div>
 
 	    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
-	    <script src="{{ base_url }}/plugins/PicoEditor/epiceditor/js/epiceditor.min.js"></script>
+	    <script src="{{ base_url }}/plugins/PicoEditor/assets/epiceditor/js/epiceditor.min.js"></script>
 	    <script>
 	    $(document).ready(function() {
 
 	    	var unsaved = false;
 		    var editor = new EpicEditor({
 				container: 'epiceditor',
-				basePath: '{{ base_url }}/plugins/PicoEditor/epiceditor',
+				basePath: '{{ base_url }}/plugins/PicoEditor/assets/epiceditor',
 				clientSideStorage: false,
 				file: {
 					name: 'epiceditor',
@@ -48,9 +48,9 @@
 					autoSave: 5000
 				},
 				theme: {
-					base: '{{ base_url }}/plugins/PicoEditor/epiceditor/themes/base/epiceditor.css',
-					preview: '{{ base_url }}/plugins/PicoEditor/epiceditor/themes/preview/github.css',
-					editor: '{{ base_url }}/plugins/PicoEditor/epiceditor/themes/editor/epic-light.css'
+					base: '{{ base_url }}/plugins/PicoEditor/assets/epiceditor/themes/base/epiceditor.css',
+					preview: '{{ base_url }}/plugins/PicoEditor/assets/epiceditor/themes/preview/github.css',
+					editor: '{{ base_url }}/plugins/PicoEditor/assets/epiceditor/themes/editor/epic-light.css'
 				},
 				button: {
 					preview: true,
