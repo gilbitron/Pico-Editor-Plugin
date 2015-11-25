@@ -72,7 +72,7 @@ label, input[type=button], input[type=submit], button {
 	cursor: pointer;
 }
 
-/* make buttons play nice in IE:	 
+/* make buttons play nice in IE:
 		www.viget.com/inspire/styling-the-button-element-in-internet-explorer/ */
 button {
 	width: auto;
@@ -86,8 +86,8 @@ img {
 
 /* Input Styles
 /*---------------------------------------------*/
-input, 
-textarea, 
+input,
+textarea,
 select {
 	font: 14px/20px "Helvetica Neue", Helvetica, Arial, sans-serif;
 	color: #55606E;
@@ -120,7 +120,7 @@ label { color: #555; }
 body {
 	font: 14px/1.8em 'Open Sans', Helvetica, Arial, Helvetica, sans-serif;
 	color: #222;
-	background: #F9FBFC;
+	background: #2EAE9B;
 	overflow: hidden;
 	-webkit-font-smoothing: antialiased;
 	-webkit-box-sizing: border-box;
@@ -143,8 +143,39 @@ a:hover, a:active {
 	text-decoration: none;
 }
 
+.wrapper {
+  background: #707070;
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 300px;
+  margin-top: -200px;
+  overflow: hidden;
+}
+.wrapper.form-success .container h1 {
+  -webkit-transform: translateY(85px);
+      -ms-transform: translateY(85px);
+          transform: translateY(85px);
+}
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 80px 0;
+  height: 400px;
+  text-align: center;
+}
+.container h1 {
+  font-size: 40px;
+  -webkit-transition-duration: 1s;
+          transition-duration: 1s;
+  -webkit-transition-timing-function: ease-in-put;
+          transition-timing-function: ease-in-put;
+  font-weight: 200;
+}
+
 .btn {
-	display: inline-block; 
+	display: inline-block;
 	line-height: 20px;
 	padding: 1px 7px;
 	text-shadow: #FFF 0 1px 0;
@@ -171,6 +202,7 @@ a:hover, a:active {
 }
 
 #sidebar {
+	background: #fff;
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -197,8 +229,8 @@ a:hover, a:active {
 	   -moz-box-shadow: 0px 1px 1px rgba(0,0,0,0.07);
 	        box-shadow: 0px 1px 1px rgba(0,0,0,0.07);
 }
-#sidebar .controls .new { 
-	float: right; 
+#sidebar .controls .new {
+	float: right;
 	margin-top: 5px;
 }
 #sidebar .nav {
@@ -206,9 +238,9 @@ a:hover, a:active {
 	margin: 38px 0 25px 0;
 	padding: 0;
 }
-#sidebar li { 
+#sidebar li {
 	line-height: 25px;
-	position: relative; 
+	position: relative;
 	border-bottom: 1px solid #DCE0E3;
 }
 #sidebar li a {
@@ -248,6 +280,7 @@ a:hover, a:active {
 #sidebar li:hover .delete { opacity: 1; }
 
 #main {
+	background: #fff;
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -285,28 +318,54 @@ a:hover, a:active {
 
 /* Login Styles
 /*---------------------------------------------*/
-
-#login-form {
-	width: 300px;
-	margin: 200px auto;
+#login .container h1 {
+	color: #fff;
 }
-#login-form h1 {
-	font-size: 20px;
-	font-weight: bold;
-	margin-bottom: 20px;
+#login-form form {
+  padding: 20px 0;
+  position: relative;
+  z-index: 2;
 }
 #login-form input {
-	margin-right: 5px;
-	width: 227px;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  outline: 0;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  background-color: rgba(255, 255, 255, 1);
+  width: 250px;
+  border-radius: 3px;
+  padding: 10px 15px;
+  margin: 0 auto 10px auto;
+  display: block;
+  text-align: center;
+  font-size: 18px;
+  color: white;
+  -webkit-transition-duration: 0.25s;
+          transition-duration: 0.25s;
+  font-weight: 300;
 }
-#login-form .btn {
-	width: auto;
-	padding-left: 10px;
-	padding-right: 10px;
+#login-form input:hover {
+  background-color: rgba(255, 255, 255, 0.4);
 }
-#login-form .error {
-	color: red;
-	margin-bottom: 10px;
+#login-form input:focus {
+  background-color: white;
+  width: 300px;
+  color: #53e3a6;
+}
+#login-form button {
+  outline: 0;
+  background-color: white;
+  border: 0;
+  padding: 10px 15px;
+  color: #53e3a6;
+  border-radius: 3px;
+  width: 250px;
+  cursor: pointer;
+  font-size: 18px;
+}
+#login-form button:hover {
+  background-color: #f5f7f9;
 }
 
 /* Misc Styles
