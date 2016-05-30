@@ -78,20 +78,15 @@ class Pico_Editor {
 			exit; // Don't continue to render template
 		}
 	}
-	
-	private function do_new()
-	{
-		if(!isset($_SESSION['pico_logged_in']) || !$_SESSION['pico_logged_in']) die(json_encode(array('error' => 'Error: Unathorized')));
-		$title = isset($_POST['title']) && $_POST['title'] ? strip_tags($_POST['title']) : '';
-		$file = $this->slugify(basename($title));
-		if(!$file) die(json_encode(array('error' => 'Error: Invalid file name')));
-		
+
+	private function do_new() {
+		$title = null;
+		$file = $this->parse_path(true, $title);
 		$error = '';
-		$file .= CONTENT_EXT;
 		$content = '/*
 Title: '. $title .'
 Author: 
-Date: '. date('Y/m/d') .'		
+Date: '. date('Y/m/d') .'
 */';
 		if(file_exists(CONTENT_DIR . $file)){
 			$error = 'Error: A post already exists with this title';
@@ -102,24 +97,11 @@ Date: '. date('Y/m/d') .'
 		die(json_encode(array(
 			'title' => $title,
 			'content' => $content,
-			'file' => basename(str_replace(CONTENT_EXT, '', $file)),
+			'file' => str_replace(CONTENT_EXT, '', $file),
 			'error' => $error
 		)));
 	}
 	
-	private function parse_path() {
-		if(!isset($_SESSION['pico_logged_in']) || !$_SESSION['pico_logged_in']) die(json_encode(array('error' => 'Error: Unauthorized')));
-		$file_url = isset($_POST['file']) && $_POST['file'] ? $_POST['file'] : '';
-		$file = parse_url(strip_tags($file_url), PHP_URL_PATH);
-		if(!$file) die('Error: Invalid file');
-
-		if (substr($file, -1) === DIRECTORY_SEPARATOR) {
-			$file .= 'index';
-		}
-
-		return $file . CONTENT_EXT;
-	}
-
 	private function do_open()
 	{
 		$file = $this->parse_path();
@@ -145,23 +127,64 @@ Date: '. date('Y/m/d') .'
 		
 		if(file_exists(CONTENT_DIR . $file)) die(unlink(CONTENT_DIR . $file));
 	}
-	
+
+
+
+	private function parse_path($is_new = false, &$title = null) {
+
+		$kill = function($message) {
+			if ($is_new) {
+				die(json_encode(array('error' => $message)));
+			} else {
+				die($message);
+			}
+		};
+
+		$key = $is_new ? 'title' : 'file';
+
+		// Authenticate
+		if(!isset($_SESSION['pico_logged_in']) || !$_SESSION['pico_logged_in']) $kill(json_encode(array('error' => 'Error: Unauthorized')));
+
+		// Extract the path from the absolute URL.
+		$file_url = isset($_POST[$key]) && $_POST[$key] ? $_POST[$key] : '';
+
+		if ($is_new) $title = $file_url;
+
+		$file = parse_url(strip_tags($file_url), PHP_URL_PATH);
+
+		// For do_new(), we need to slugify the path.
+		if ($is_new) {
+			$file = $this->slugify($file);
+		}
+
+		if(!$file) $kill('Error: Invalid file');
+
+		// index.md
+		if (substr($file, -1) === DIRECTORY_SEPARATOR) {
+			$file .= 'index';
+		}
+
+		return $file . CONTENT_EXT;
+	}
+
+
+
 	private function slugify($text)
 	{ 
 		// replace non letter or digits by -
-		$text = preg_replace('~[^\\pL\d]+~u', '-', $text);
+		$text = preg_replace('~[^\pL\d/]+~u', '-', $text);
 		
 		// trim
 		$text = trim($text, '-');
 		
-		// transliterate
+		// convert to ascii
 		$text = iconv('utf-8', 'us-ascii//TRANSLIT', $text);
 		
 		// lowercase
 		$text = strtolower($text);
 		
-		// remove unwanted characters
-		$text = preg_replace('~[^-\w]+~', '', $text);
+		// remove non[ascii text] characters
+		$text = preg_replace('~[^-\w/]+~', '', $text);
 		
 		if (empty($text))
 		{
